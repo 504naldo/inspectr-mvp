@@ -32,14 +32,12 @@ export class ObservationsService {
       return this.repo.save(existing);
     }
 
-    // No existing row—create a fresh one
-    const obs = this.repo.create({
+    // No existing row—save a new one directly
+    return this.repo.save({
       device,
       takenAt: data.takenAt,
       result: data.result,
-      notes: data.notes ?? null,
+      ...(data.notes !== undefined && { notes: data.notes }),
     });
-
-    return this.repo.save(obs);
   }
 }
