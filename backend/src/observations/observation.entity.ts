@@ -10,7 +10,7 @@ export class Observation {
   device!: Device;
 
   @Column()
-  takenAt1: Date;
+  takenAt!: Date;
 
   @Column()
   result!: string;
