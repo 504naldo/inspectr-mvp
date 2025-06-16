@@ -4,17 +4,17 @@ import { Observation } from '../observations/observation.entity';
 @Entity()
 export class Device {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ unique: true })
-  barcode: string;
+  barcode!: string;
 
   @Column()
-  building: string;
+  building!: string;
 
   @Column()
-  type: string;
+  type!: string;
 
   @OneToMany(() => Observation, o => o.device)
-  observations: Observation[];
+  observations!: Observation[];
 }
