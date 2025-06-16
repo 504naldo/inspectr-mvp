@@ -4,17 +4,17 @@ import { Device } from '../devices/device.entity';
 @Entity()
 export class Observation {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @ManyToOne(() => Device, d => d.observations, { eager: true })
-  device: Device;
+  device!: Device;
 
   @Column()
-  takenAt: Date;
+  takenAt1: Date;
 
   @Column()
-  result: string;
+  result!: string;
 
   @Column({ nullable: true })
-  notes?: string;
+  notes!: string;
 }
