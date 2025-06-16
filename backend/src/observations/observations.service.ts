@@ -16,9 +16,13 @@ export class ObservationsService {
       where: { device: { id: device.id }, takenAt: data.takenAt },
     });
     if (existing) {
-      existing.result = data.result;
-      existing.notes = data.notes;
-      return this.repo.save(existing);
+  existing.result = data.result;
+  if (data.notes !== undefined) {
+    existing.notes = data.notes;
+  }
+  return this.repo.save(existing);
+}
+
     }
     const obs = this.repo.create({ ...data, device });
     return this.repo.save(obs);
