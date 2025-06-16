@@ -8,23 +8,38 @@ import { Device } from '../devices/device.entity';
 export class ObservationsService {
   constructor(
     @InjectRepository(Observation)
-    private repo: Repository<Observation>,
+    private readonly repo: Repository<Observation>,
   ) {}
 
-  async upsert(device: Device, data: { takenAt: Date; result: string; notes?: string }) {
+  /**
+   * Upsert an observation: if one with the same device+timestamp exists,
+   * update it; otherwise create a new row.
+   */
+  async upsert(
+    device: Device,
+    data: { takenAt: Date; result: string; notes?: string },
+  ): Promise<Observation> {
+    // Try to find an existing observation for this device at that exact time
     const existing = await this.repo.findOne({
       where: { device: { id: device.id }, takenAt: data.takenAt },
     });
-    if (existing) {
-  existing.result = data.result;
-  if (data.notes !== undefined) {
-    existing.notes = data.notes;
-  }
-  return this.repo.save(existing);
-}
 
+    if (existing) {
+      existing.result = data.result;
+      if (data.notes !== undefined) {
+        existing.notes = data.notes;
+      }
+      return this.repo.save(existing);
     }
-    const obs = this.repo.create({ ...data, device });
+
+    // No existing row—create a fresh one
+    const obs = this.repo.create({
+      device,
+      takenAt: data.takenAt,
+      result: data.result,
+      notes: data.notes ?? null,
+    });
+
     return this.repo.save(obs);
   }
 }
