@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+// backend/src/devices/devices.service.ts
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Device } from './device.entity';
@@ -7,15 +8,15 @@ import { Device } from './device.entity';
 export class DevicesService {
   constructor(
     @InjectRepository(Device)
-    private repo: Repository<Device>,
+    private readonly repo: Repository<Device>,
   ) {}
 
-  add(data: Partial<Device>) {
+  add(data: Partial<Device>): Promise<Device> {
     const device = this.repo.create(data);
     return this.repo.save(device);
   }
 
-  findByBarcode(barcode: string) {
+  findByBarcode(barcode: string): Promise<Device | null> {
     return this.repo.findOne({ where: { barcode } });
   }
 }
