@@ -1,3 +1,4 @@
+// backend/src/devices/devices.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Device } from './device.entity';
